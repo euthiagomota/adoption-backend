@@ -18,7 +18,11 @@ public class SecurityConfig {
         http
                 .csrf(csrf -> csrf.disable()) // Desativa CSRF (útil para APIs REST)
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers("/auth/register").permitAll() // Libera o endpoint de registro
+                                .requestMatchers(
+                                        "/auth/register",
+                                        "/v3/api-docs/**",
+                                        "/swagger-ui/**",
+                                        "/swagger-ui.html").permitAll() // Libera os endpoints
                                 .anyRequest().authenticated() // O restante precisa estar autenticado
                 )
                 .httpBasic(basic -> basic.disable()) // Desativa autenticação básica
