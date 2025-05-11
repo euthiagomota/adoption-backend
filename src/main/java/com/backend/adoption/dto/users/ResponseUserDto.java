@@ -1,7 +1,7 @@
 package com.backend.adoption.dto.users;
 
 import java.util.Date;
-
+// VALIDATION
 public record ResponseUserDto(
         Long id,
         String name,
