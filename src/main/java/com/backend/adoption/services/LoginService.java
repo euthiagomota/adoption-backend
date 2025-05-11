@@ -4,6 +4,7 @@ import com.backend.adoption.dto.login.AuthRequest;
 import com.backend.adoption.dto.login.AuthResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.stereotype.Service;
 
@@ -17,13 +18,17 @@ public class LoginService {
     private AuthenticationManager authenticationManager;
 
     public AuthResponse login(AuthRequest request) {
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(request.email(), request.password());
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(request.email(), request.password());
 
-        authenticationManager.authenticate(authenticationToken);
+            authenticationManager.authenticate(authenticationToken);
 
-        String token = jwtService.generateToken(request.email());
+            String token = jwtService.generateToken(request.email());
+            return new AuthResponse(token);
 
-        return new AuthResponse(token);
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Email ou senha inválidos");
+        }
     }
 }
