@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -59,5 +61,26 @@ public class GlobalExceptionHandler {
         );
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(errorResponse);
+    }
+    @ExceptionHandler(MethodArgumentNotValidException .class)
+    public ResponseEntity<Object> handleValidationException(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = ex.getBindingResult()
+                .getFieldErrors()
+                .stream()
+                .collect(
+                        java.util.stream.Collectors.toMap(
+                                FieldError::getField,
+                                FieldError::getDefaultMessage,
+                                (msg1, msg2) -> msg1 // em caso de campos duplicados
+                        )
+                );
+
+        Map<String, Object> response = Map.of(
+                "statusCode", HttpStatus.BAD_REQUEST.value(),
+                "message", "Validation failed",
+                "errors", errors
+        );
+
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 }

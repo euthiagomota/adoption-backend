@@ -3,6 +3,7 @@ package com.backend.adoption.controllers;
 import com.backend.adoption.dto.login.AuthRequest;
 import com.backend.adoption.dto.login.AuthResponse;
 import com.backend.adoption.services.LoginService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.backend.adoption.dto.users.RegisterRequestDto;
@@ -25,13 +26,13 @@ public class AuthController {
     LoginService loginService;
 
     @PostMapping("/register")
-    public ResponseEntity<ResponseUserDto> register(@RequestBody RegisterRequestDto req) {
+    public ResponseEntity<ResponseUserDto> register(@Valid @RequestBody RegisterRequestDto req) {
         ResponseUserDto response = this.authService.register(req);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody AuthRequest req) {
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody AuthRequest req) {
         AuthResponse token = this.loginService.login(req);
         return ResponseEntity.status(HttpStatus.OK).body(token);
     }
