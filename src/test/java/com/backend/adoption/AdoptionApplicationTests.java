@@ -1,6 +1,5 @@
-package com.backend.demo;
+package com.backend.adoption;
 
-import com.backend.adoption.AdoptionApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 

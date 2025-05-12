@@ -1,9 +1,7 @@
-package com.backend.demo.login;
+package com.backend.adoption.services;
 
 import com.backend.adoption.dto.login.AuthRequest;
 import com.backend.adoption.dto.login.AuthResponse;
-import com.backend.adoption.services.JwtService;
-import com.backend.adoption.services.LoginService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
